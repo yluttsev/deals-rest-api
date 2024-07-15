@@ -1,0 +1,250 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: yluttsev
+      changes:
+        - createTable:
+            tableName: deal_status
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: varchar(30)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    defaultValueBoolean: true
+
+  - changeSet:
+      id: 2
+      author: yluttsev
+      changes:
+        - createTable:
+            tableName: deal_type
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: varchar(30)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    defaultValueBoolean: true
+
+  - changeSet:
+      id: 3
+      author: yluttsev
+      changes:
+        - createTable:
+            tableName: deal
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: agreement_number
+                  type: text
+              - column:
+                  name: agreement_date
+                  type: date
+              - column:
+                  name: agreement_start_dt
+                  type: timestamp
+              - column:
+                  name: availability_date
+                  type: date
+              - column:
+                  name: type
+                  type: varchar(30)
+                  constraints:
+                    foreignKeyName: type
+                    referencedTableName: deal_type
+                    referencedColumnNames: id
+              - column:
+                  name: status
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: status
+                    referencedTableName: deal_status
+                    referencedColumnNames: id
+              - column:
+                  name: sum
+                  type: number(100, 2)
+              - column:
+                  name: close_dt
+                  type: timestamp
+              - column:
+                  name: create_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+                    defaultValueComputed: current_timestamp
+              - column:
+                  name: modify_date
+                  type: timestamp
+              - column:
+                  name: create_user_id
+                  type: text
+              - column:
+                  name: modify_user_id
+                  type: text
+              - column:
+                  name: is_active
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    defaultValueBoolean: true
+
+  - changeSet:
+      id: 4
+      author: yluttsev
+      changes:
+        - createTable:
+            tableName: deal_contractor
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: deal_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: deal_id
+                    referencedTableName: deal
+                    referencedColumnNames: id
+              - column:
+                  name: contractor_id
+                  type: varchar(12)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: inn
+                  type: text
+              - column:
+                  name: main
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    defaultValueBoolean: false
+                    unique: true
+              - column:
+                  name: create_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+                    defaultValueComputed: current_timestamp
+              - column:
+                  name: modify_date
+                  type: timestamp
+              - column:
+                  name: create_user_id
+                  type: text
+              - column:
+                  name: modify_user_id
+                  type: text
+              - column:
+                  name: is_active
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    defaultValueBoolean: true
+
+  - changeSet:
+      id: 5
+      author: yluttsev
+      changes:
+        - createTable:
+            tableName: contractor_role
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    defaultValueBoolean: true
+
+  - changeSet:
+      id: 6
+      author: yluttsev
+      changes:
+        - createTable:
+            tableName: contractor_to_role
+            ifNotExists: true
+            columns:
+              - column:
+                  name: contractor_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: contractor_id
+                    referencedTableName: deal_contractor
+                    referencedColumnNames: id
+              - column:
+                  name: role_id
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: role_id
+                    referencedTableName: contractor_role
+                    referencedColumnNames: id
+              - column:
+                  name: is_active
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    defaultValueBoolean: true
