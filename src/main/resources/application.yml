@@ -2,8 +2,10 @@ spring:
   application:
     name: deals-rest-api
   config:
-    import: classpath: database.yml
+    import: database.yml
   mvc:
     hiddenmethod:
       filter:
         enabled: true
+  liquibase:
+    change-log: db/changelog/changelog-master.yaml

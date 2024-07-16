@@ -7,12 +7,12 @@ VALUES ('CREDIT', 'Кредитная сделка'),
        ('OTHER', 'Иное');
 
 --changeset yluttsev:8
-INSERT INTO deal_status_dict (id, name)
+INSERT INTO deal_status (id, name)
 VALUES ('DRAFT', 'Черновик'),
        ('ACTIVE', 'Утвержденная'),
        ('CLOSED', 'Закрытая');
 
---changeset yluttsev: 9
+--changeset yluttsev:9
 INSERT INTO contractor_role (id, name, category)
 VALUES ('BORROWER', 'Заемщик', 'BORROWER'),
        ('DRAWER', 'Векселедатель', 'BORROWER'),

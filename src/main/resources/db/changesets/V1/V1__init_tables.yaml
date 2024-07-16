@@ -21,9 +21,9 @@ databaseChangeLog:
               - column:
                   name: is_active
                   type: boolean
+                  defaultValueBoolean: true
                   constraints:
                     nullable: false
-                    defaultValueBoolean: true
 
   - changeSet:
       id: 2
@@ -47,9 +47,9 @@ databaseChangeLog:
               - column:
                   name: is_active
                   type: boolean
+                  defaultValueBoolean: true
                   constraints:
                     nullable: false
-                    defaultValueBoolean: true
 
   - changeSet:
       id: 3
@@ -104,9 +104,9 @@ databaseChangeLog:
               - column:
                   name: create_date
                   type: timestamp
+                  defaultValueComputed: current_timestamp
                   constraints:
                     nullable: false
-                    defaultValueComputed: current_timestamp
               - column:
                   name: modify_date
                   type: timestamp
@@ -119,9 +119,9 @@ databaseChangeLog:
               - column:
                   name: is_active
                   type: boolean
+                  defaultValueBoolean: true
                   constraints:
                     nullable: false
-                    defaultValueBoolean: true
 
   - changeSet:
       id: 4
@@ -161,16 +161,16 @@ databaseChangeLog:
               - column:
                   name: main
                   type: boolean
+                  defaultValueBoolean: false
                   constraints:
                     nullable: false
-                    defaultValueBoolean: false
                     unique: true
               - column:
                   name: create_date
                   type: timestamp
+                  defaultValueComputed: current_timestamp
                   constraints:
                     nullable: false
-                    defaultValueComputed: current_timestamp
               - column:
                   name: modify_date
                   type: timestamp
@@ -183,9 +183,9 @@ databaseChangeLog:
               - column:
                   name: is_active
                   type: boolean
+                  defaultValueBoolean: true
                   constraints:
                     nullable: false
-                    defaultValueBoolean: true
 
   - changeSet:
       id: 5
@@ -214,9 +214,9 @@ databaseChangeLog:
               - column:
                   name: is_active
                   type: boolean
+                  defaultValueBoolean: true
                   constraints:
                     nullable: false
-                    defaultValueBoolean: true
 
   - changeSet:
       id: 6
@@ -245,6 +245,6 @@ databaseChangeLog:
               - column:
                   name: is_active
                   type: boolean
+                  defaultValueBoolean: true
                   constraints:
                     nullable: false
-                    defaultValueBoolean: true
