@@ -5,6 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -14,6 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -60,5 +64,13 @@ public class DealContractor {
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
+
+    @ManyToMany
+    @JoinTable(
+            name = "contractor_to_role",
+            joinColumns = @JoinColumn(name = "contractor_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<ContractorRole> roles;
 
 }
