@@ -5,13 +5,13 @@ import org.springframework.stereotype.Service;
 import ru.luttsev.deals.exception.DealStatusNotFoundException;
 import ru.luttsev.deals.model.entity.DealStatus;
 import ru.luttsev.deals.repository.DealStatusRepository;
-import ru.luttsev.deals.service.CrudService;
+import ru.luttsev.deals.service.DealStatusService;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DealStatusServiceImpl implements CrudService<DealStatus, String> {
+public class DealStatusServiceImpl implements DealStatusService {
 
     private final DealStatusRepository dealStatusRepository;
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.luttsev.deals.model.entity.DealContractor;
 import ru.luttsev.deals.model.payload.dealcontractor.DealContractorPayload;
-import ru.luttsev.deals.model.payload.dealcontractor.SaveDealPayload;
+import ru.luttsev.deals.model.payload.dealcontractor.SaveDealContractorPayload;
 import ru.luttsev.deals.service.DealContractorService;
 
 import java.util.UUID;
@@ -26,7 +26,7 @@ public class DealContractorController {
     private final ModelMapper mapper;
 
     @PutMapping("/save")
-    public DealContractorPayload saveDealContractor(@RequestBody SaveDealPayload payload) {
+    public DealContractorPayload saveDealContractor(@RequestBody SaveDealContractorPayload payload) {
         DealContractor dealContractor = mapper.map(payload, DealContractor.class);
         DealContractor savedDealContractor = dealContractorService.save(dealContractor);
         return mapper.map(savedDealContractor, DealContractorPayload.class);

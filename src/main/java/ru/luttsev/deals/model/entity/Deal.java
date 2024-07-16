@@ -8,6 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -15,10 +17,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -27,6 +35,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@SQLRestriction("is_active = true")
 public class Deal {
 
     @Id
@@ -67,21 +76,37 @@ public class Deal {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime closeDate;
 
+    @OneToMany(mappedBy = "deal")
+    private List<DealContractor> contractors;
+
+    @CreatedDate
     @Column(name = "create_date", nullable = false, insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createDate;
 
+    @LastModifiedDate
     @Column(name = "modify_date")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifyDate;
 
+    @CreatedBy
     @Column(name = "create_user_id")
     private String createUserId;
 
+    @LastModifiedBy
     @Column(name = "modify_user_id")
     private String modifyUserId;
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
+
+    @PrePersist
+    public void setDefaultValues() {
+        status = DealStatus.builder()
+                .id("DRAFT")
+                .name("Черновик")
+                .isActive(true)
+                .build();
+    }
 
 }
