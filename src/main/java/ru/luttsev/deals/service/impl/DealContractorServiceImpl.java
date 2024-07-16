@@ -1,20 +1,24 @@
 package ru.luttsev.deals.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.luttsev.deals.exception.DealContractorNotFoundException;
 import ru.luttsev.deals.model.entity.DealContractor;
 import ru.luttsev.deals.repository.DealContractorRepository;
-import ru.luttsev.deals.service.CrudService;
+import ru.luttsev.deals.service.ContractorRoleService;
+import ru.luttsev.deals.service.DealContractorService;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class DealContractorServiceImpl implements CrudService<DealContractor, UUID> {
+public class DealContractorServiceImpl implements DealContractorService {
 
     private final DealContractorRepository dealContractorRepository;
+
+    private final ContractorRoleService contractorRoleService;
 
     @Override
     public List<DealContractor> getAll() {
@@ -34,8 +38,11 @@ public class DealContractorServiceImpl implements CrudService<DealContractor, UU
     }
 
     @Override
+    @Transactional
     public void deleteById(UUID id) {
-        dealContractorRepository.deleteById(id);
+        DealContractor dealContractor = this.getById(id);
+        dealContractor.setActive(false);
+        this.save(dealContractor);
     }
 
 }
