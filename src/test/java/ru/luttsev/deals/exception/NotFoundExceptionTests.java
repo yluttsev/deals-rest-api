@@ -38,7 +38,7 @@ class NotFoundExceptionTests {
     private static final UUID INVALID_ID = UUID.randomUUID();
 
     @Test
-    @DisplayName("Тест выброса исключения ContractorRoleNotFoundException")
+    @DisplayName("Выброс исключения ContractorRoleNotFoundException")
     void testThrowingContractorRoleNotFoundException() {
         when(contractorRoleService.getById(INVALID_ID.toString())).thenThrow(
                 new ContractorRoleNotFoundException(INVALID_ID.toString())
@@ -52,7 +52,7 @@ class NotFoundExceptionTests {
     }
 
     @Test
-    @DisplayName("Тест выброса исключения DealContractorNotFoundException")
+    @DisplayName("Выброс исключения DealContractorNotFoundException")
     void testThrowingDealContractorNotFoundException() {
         when(dealContractorService.getById(INVALID_ID)).thenThrow(
                 new DealContractorNotFoundException(INVALID_ID)
@@ -66,7 +66,7 @@ class NotFoundExceptionTests {
     }
 
     @Test
-    @DisplayName("Тест выброса исключения DealNotFoundException")
+    @DisplayName("Выброс исключения DealNotFoundException")
     void testThrowingDealNotFoundException() {
         when(dealService.getById(INVALID_ID)).thenThrow(
                 new DealNotFoundException(INVALID_ID)
@@ -80,7 +80,7 @@ class NotFoundExceptionTests {
     }
 
     @Test
-    @DisplayName("Тест выброса исключения DealStatusNotFoundException")
+    @DisplayName("Выброс исключения DealStatusNotFoundException")
     void testThrowingDealStatusNotFoundException() {
         when((dealStatusService.getById(INVALID_ID.toString()))).thenThrow(
                 new DealStatusNotFoundException(INVALID_ID.toString())
@@ -94,7 +94,7 @@ class NotFoundExceptionTests {
     }
 
     @Test
-    @DisplayName("Тест выброса исключения DealTypeNotFoundException")
+    @DisplayName("Выброс исключения DealTypeNotFoundException")
     void testThrowingDealTypeNotFoundException() {
         when(dealTypeService.getById(INVALID_ID.toString())).thenThrow(
                 new DealTypeNotFoundException(INVALID_ID.toString())
