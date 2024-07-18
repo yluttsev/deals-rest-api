@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.luttsev.deals.exception.DealContractorNotFoundException;
 import ru.luttsev.deals.model.entity.DealContractor;
 import ru.luttsev.deals.repository.DealContractorRepository;
-import ru.luttsev.deals.service.ContractorRoleService;
 import ru.luttsev.deals.service.DealContractorService;
 
 import java.util.List;
@@ -17,8 +16,6 @@ import java.util.UUID;
 public class DealContractorServiceImpl implements DealContractorService {
 
     private final DealContractorRepository dealContractorRepository;
-
-    private final ContractorRoleService contractorRoleService;
 
     @Override
     public List<DealContractor> getAll() {
