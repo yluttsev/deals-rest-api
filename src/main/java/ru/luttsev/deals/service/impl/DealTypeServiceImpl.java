@@ -5,13 +5,13 @@ import org.springframework.stereotype.Service;
 import ru.luttsev.deals.exception.DealTypeNotFoundException;
 import ru.luttsev.deals.model.entity.DealType;
 import ru.luttsev.deals.repository.DealTypeRepository;
-import ru.luttsev.deals.service.CrudService;
+import ru.luttsev.deals.service.DealTypeService;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DealTypeServiceImpl implements CrudService<DealType, String> {
+public class DealTypeServiceImpl implements DealTypeService {
 
     private final DealTypeRepository dealTypeRepository;
 
