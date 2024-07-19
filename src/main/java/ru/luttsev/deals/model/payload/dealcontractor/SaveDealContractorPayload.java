@@ -14,7 +14,8 @@ public class SaveDealContractorPayload {
 
     private String id;
 
-    private String description;
+    @JsonProperty("deal_id")
+    private String dealId;
 
     @JsonProperty("contractor_id")
     private String contractorId;
