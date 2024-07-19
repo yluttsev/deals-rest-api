@@ -18,6 +18,7 @@ import ru.luttsev.deals.model.payload.deal.DealPagePayload;
 import ru.luttsev.deals.model.payload.deal.DealPayload;
 import ru.luttsev.deals.model.payload.deal.SaveDealPayload;
 import ru.luttsev.deals.service.DealService;
+import ru.luttsev.deals.service.DealStatusService;
 
 import java.util.UUID;
 
@@ -27,6 +28,8 @@ import java.util.UUID;
 public class DealController {
 
     private final DealService dealService;
+
+    private final DealStatusService dealStatusService;
 
     private final ModelMapper mapper;
 
@@ -45,7 +48,7 @@ public class DealController {
 
     @PatchMapping("/change/status")
     public DealPayload changeDealStatus(@RequestBody ChangeDealStatusPayload payload) {
-        Deal deal = dealService.updateStatus(payload.getDealId(), payload.getStatusId());
+        Deal deal = dealStatusService.updateStatus(payload.getDealId(), payload.getStatusId());
         return mapper.map(deal, DealPayload.class);
     }
 

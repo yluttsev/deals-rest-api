@@ -8,8 +8,6 @@ import java.util.UUID;
 
 public interface DealService extends CrudService<Deal, UUID> {
 
-    Deal updateStatus(String dealId, String statusId);
-
     DealPagePayload getByFilters(DealFiltersPayload filters, int page, int contentSize);
 
 }

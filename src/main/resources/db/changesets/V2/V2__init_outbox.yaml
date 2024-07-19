@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10
+      author: yluttsev
+      changes:
+        - createTable:
+            tableName: outbox
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: contractor_id
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_main
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: creation_date
+                  type: timestamp
+                  defaultValueComputed: current_timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: text
+                  constraints:
+                    nullable: false
