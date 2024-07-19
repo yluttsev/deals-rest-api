@@ -42,6 +42,9 @@ class ContractorToRoleControllerTests {
     @Autowired
     private MockMvc mvc;
 
+    @MockBean
+    private ContractorRoleService contractorRoleService;
+
     private DealContractor createContractor(String name) {
         return DealContractor.builder()
                 .id(UUID.randomUUID())
@@ -56,9 +59,6 @@ class ContractorToRoleControllerTests {
                 .name(name)
                 .build();
     }
-
-    @MockBean
-    private ContractorRoleService contractorRoleService;
 
     @Test
     @DisplayName("Добавление роли контрагенту")
