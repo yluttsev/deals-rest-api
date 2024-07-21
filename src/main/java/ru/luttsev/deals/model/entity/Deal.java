@@ -72,7 +72,7 @@ public class Deal {
     @ToString.Exclude
     private DealType type;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status", referencedColumnName = "id", nullable = false)
     private DealStatus status;
 
@@ -83,7 +83,7 @@ public class Deal {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime closeDate;
 
-    @OneToMany(mappedBy = "deal")
+    @OneToMany(mappedBy = "deal", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<DealContractor> contractors;
 

@@ -2,6 +2,7 @@ package ru.luttsev.deals.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -76,7 +77,7 @@ public class DealContractor {
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "contractor_to_role",
             joinColumns = @JoinColumn(name = "contractor_id"),
