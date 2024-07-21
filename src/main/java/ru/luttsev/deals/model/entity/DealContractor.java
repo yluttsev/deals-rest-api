@@ -10,6 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -36,6 +38,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @SQLRestriction("is_active = true")
+@NamedEntityGraph(name = "deal-contractor-entity-graph", attributeNodes = {
+        @NamedAttributeNode("deal"),
+        @NamedAttributeNode("roles")
+})
 public class DealContractor {
 
     @Id
@@ -43,8 +49,9 @@ public class DealContractor {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deal_id", referencedColumnName = "id")
+    @ToString.Exclude
     private Deal deal;
 
     @Column(name = "contractor_id", nullable = false)
