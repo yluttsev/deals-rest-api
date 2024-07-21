@@ -17,4 +17,9 @@ public class OutboxServiceImpl implements OutboxService {
         outboxRepository.save(message);
     }
 
+    @Override
+    public Outbox getLastMessage() {
+        return outboxRepository.findLast().orElseThrow();
+    }
+
 }

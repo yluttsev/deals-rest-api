@@ -6,4 +6,6 @@ public interface OutboxService {
 
     void save(Outbox message);
 
+    Outbox getLastMessage();
+
 }
