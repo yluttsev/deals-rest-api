@@ -19,6 +19,8 @@ import ru.luttsev.deals.model.payload.deal.DealPayload;
 import ru.luttsev.deals.model.payload.deal.SaveDealPayload;
 import ru.luttsev.deals.service.DealService;
 import ru.luttsev.deals.service.DealStatusService;
+import ru.luttsev.springbootstarterauditlib.LogLevel;
+import ru.luttsev.springbootstarterauditlib.annotation.AuditLog;
 
 import java.util.UUID;
 
@@ -53,6 +55,7 @@ public class DealController {
      * @param dealId ID сделки
      * @return {@link DealPayload DTO сделки}
      */
+    @AuditLog(logLevel = LogLevel.INFO)
     @GetMapping("/{id}")
     public DealPayload getDealById(@PathVariable("id") UUID dealId) {
         Deal deal = dealService.getById(dealId);
@@ -65,6 +68,7 @@ public class DealController {
      * @param payload {@link SaveDealPayload DTO сохранения сделки}
      * @return {@link DealPayload DTO} созданой или обновленной сделки
      */
+    @AuditLog(logLevel = LogLevel.INFO)
     @PutMapping("/save")
     public DealPayload saveDeal(@RequestBody SaveDealPayload payload) {
         Deal deal = mapper.map(payload, Deal.class);
@@ -78,6 +82,7 @@ public class DealController {
      * @param payload {@link ChangeDealStatusPayload DTO установки статуса сделки}
      * @return {@link DealPayload DTO сделки} с установленным статусом
      */
+    @AuditLog(logLevel = LogLevel.INFO)
     @PatchMapping("/change/status")
     public DealPayload changeDealStatus(@RequestBody ChangeDealStatusPayload payload) {
         Deal deal = dealStatusService.updateStatus(payload.getDealId(), payload.getStatusId());
@@ -92,6 +97,7 @@ public class DealController {
      * @param contentSize    количество элементов на странице
      * @return {@link DealPagePayload страница с надйенными сделками}
      */
+    @AuditLog(logLevel = LogLevel.INFO)
     @PostMapping("/search")
     public DealPagePayload searchDeals(@RequestBody DealFiltersPayload filtersPayload,
                                        @RequestParam(name = "page", defaultValue = "0") int page,

@@ -13,6 +13,8 @@ import ru.luttsev.deals.model.entity.DealContractor;
 import ru.luttsev.deals.model.payload.dealcontractor.DealContractorPayload;
 import ru.luttsev.deals.model.payload.dealcontractor.SaveDealContractorPayload;
 import ru.luttsev.deals.service.DealContractorService;
+import ru.luttsev.springbootstarterauditlib.LogLevel;
+import ru.luttsev.springbootstarterauditlib.annotation.AuditLog;
 
 import java.util.UUID;
 
@@ -42,6 +44,7 @@ public class DealContractorController {
      * @param payload {@link SaveDealContractorPayload DTO сохранения контрагента сделки}
      * @return {@link DealContractorPayload DTO} созданного или обновленного контрагента сделки
      */
+    @AuditLog(logLevel = LogLevel.INFO)
     @PutMapping("/save")
     public DealContractorPayload saveDealContractor(@RequestBody SaveDealContractorPayload payload) {
         DealContractor dealContractor = mapper.map(payload, DealContractor.class);
@@ -55,6 +58,7 @@ public class DealContractorController {
      * @param dealContractorId ID контрагента сделки
      * @return {@link ResponseEntity} пустой ответ
      */
+    @AuditLog(logLevel = LogLevel.INFO)
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteDealContractorById(@PathVariable("id") String dealContractorId) {
         dealContractorService.deleteById(UUID.fromString(dealContractorId));

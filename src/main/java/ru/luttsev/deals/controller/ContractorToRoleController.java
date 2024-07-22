@@ -11,6 +11,8 @@ import ru.luttsev.deals.model.entity.DealContractor;
 import ru.luttsev.deals.model.payload.dealcontractor.DealContractorPayload;
 import ru.luttsev.deals.model.payload.dealcontractor.SetRoleToDealContractorPayload;
 import ru.luttsev.deals.service.ContractorRoleService;
+import ru.luttsev.springbootstarterauditlib.LogLevel;
+import ru.luttsev.springbootstarterauditlib.annotation.AuditLog;
 
 /**
  * Контроллер для работы с ролями контрагентов
@@ -38,6 +40,7 @@ public class ContractorToRoleController {
      * @param payload {@link SetRoleToDealContractorPayload DTO установки роли}
      * @return {@link DealContractorPayload DTO контрагента сделки} с новой ролью
      */
+    @AuditLog(logLevel = LogLevel.INFO)
     @PostMapping("/add")
     public DealContractorPayload addRoleToDealContractor(@RequestBody SetRoleToDealContractorPayload payload) {
         DealContractor dealContractor = contractorRoleService.addRole(payload.getContractorId(), payload.getRoleId());
@@ -50,6 +53,7 @@ public class ContractorToRoleController {
      * @param payload {@link SetRoleToDealContractorPayload DTO установки роли}
      * @return {@link DealContractorPayload DTO контрагента сделки} с удаленной ролью
      */
+    @AuditLog(logLevel = LogLevel.INFO)
     @DeleteMapping("/delete")
     public DealContractorPayload deleteRoleToDealContractor(@RequestBody SetRoleToDealContractorPayload payload) {
         DealContractor dealContractor = contractorRoleService.deleteRole(payload.getContractorId(), payload.getRoleId());
