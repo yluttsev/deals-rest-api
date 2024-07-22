@@ -29,6 +29,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Сущность контрагента сделки
+ *
+ * @author Yuri Luttsev
+ */
 @Entity
 @Table(name = "deal_contractor")
 @Getter

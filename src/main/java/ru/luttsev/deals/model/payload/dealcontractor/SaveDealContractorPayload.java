@@ -6,6 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO для сохранения контрагента сделки
+ *
+ * @author Yuri Luttsev
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

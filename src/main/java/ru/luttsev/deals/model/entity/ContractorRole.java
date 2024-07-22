@@ -15,6 +15,11 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
 
+/**
+ * Сущность роли контрагента сделки
+ *
+ * @author Yuri Luttsev
+ */
 @Entity
 @Table(name = "contractor_role")
 @Getter

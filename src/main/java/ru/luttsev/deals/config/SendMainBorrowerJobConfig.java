@@ -11,13 +11,27 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.luttsev.deals.job.SendMainBorrowerJob;
 
+/**
+ * Конфигурация задачи по отправке неудачных запросов<br>
+ * в сервис контрагентов
+ *
+ * @author Yuri Luttsev
+ */
 @Configuration
 @EnableConfigurationProperties(SchedulerProperties.class)
 @RequiredArgsConstructor
 public class SendMainBorrowerJobConfig {
 
+    /**
+     * Свойства планировщика задач
+     */
     private final SchedulerProperties schedulerProperties;
 
+    /**
+     * Задача по отправке сообщений
+     *
+     * @return объект задачи
+     */
     @Bean
     public JobDetail mainBorrowerJob() {
         return JobBuilder.newJob(SendMainBorrowerJob.class)
@@ -27,6 +41,11 @@ public class SendMainBorrowerJobConfig {
                 .build();
     }
 
+    /**
+     * Триггер отправки сообщений
+     *
+     * @return объект триггера
+     */
     @Bean
     public Trigger mainBorrowerTrigger() {
         return TriggerBuilder.newTrigger()

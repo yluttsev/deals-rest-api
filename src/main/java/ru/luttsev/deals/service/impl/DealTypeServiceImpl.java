@@ -9,6 +9,11 @@ import ru.luttsev.deals.service.DealTypeService;
 
 import java.util.List;
 
+/**
+ * Реализация сервиса для работы с типами сделки
+ *
+ * @author Yuri Luttsev
+ */
 @Service
 @RequiredArgsConstructor
 public class DealTypeServiceImpl implements DealTypeService {

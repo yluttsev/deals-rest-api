@@ -18,6 +18,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Реализация сервиса для работы со статусами сделки
+ *
+ * @author Yuri Luttsev
+ */
 @Service
 @RequiredArgsConstructor
 public class DealStatusServiceImpl implements DealStatusService {

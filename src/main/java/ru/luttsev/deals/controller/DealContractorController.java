@@ -16,15 +16,32 @@ import ru.luttsev.deals.service.DealContractorService;
 
 import java.util.UUID;
 
+/**
+ * Контроллер для работы с контрагентами сделки
+ *
+ * @author Yuri Luttsev
+ */
 @RestController
 @RequestMapping("/deal-contractor")
 @RequiredArgsConstructor
 public class DealContractorController {
 
+    /**
+     * {@link DealContractorService Сервис для работы с контрагентами сделки}
+     */
     private final DealContractorService dealContractorService;
 
+    /**
+     * {@link ModelMapper Маппер сущностей и DTO}
+     */
     private final ModelMapper mapper;
 
+    /**
+     * Создает нового или обновляет существующего контрагента сделки
+     *
+     * @param payload {@link SaveDealContractorPayload DTO сохранения контрагента сделки}
+     * @return {@link DealContractorPayload DTO} созданного или обновленного контрагента сделки
+     */
     @PutMapping("/save")
     public DealContractorPayload saveDealContractor(@RequestBody SaveDealContractorPayload payload) {
         DealContractor dealContractor = mapper.map(payload, DealContractor.class);
@@ -32,6 +49,12 @@ public class DealContractorController {
         return mapper.map(savedDealContractor, DealContractorPayload.class);
     }
 
+    /**
+     * Удаляет контрагента сделки по ID
+     *
+     * @param dealContractorId ID контрагента сделки
+     * @return {@link ResponseEntity} пустой ответ
+     */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteDealContractorById(@PathVariable("id") String dealContractorId) {
         dealContractorService.deleteById(UUID.fromString(dealContractorId));

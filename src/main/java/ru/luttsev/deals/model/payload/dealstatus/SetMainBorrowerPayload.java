@@ -6,6 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO установки значения mainBorrower контраенту
+ *
+ * @author Yuri Luttsev
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

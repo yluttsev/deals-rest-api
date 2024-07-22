@@ -7,6 +7,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * DTO страницы со сделками
+ *
+ * @author Yuri Luttsev
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

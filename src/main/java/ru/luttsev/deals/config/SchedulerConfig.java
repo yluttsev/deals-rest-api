@@ -14,13 +14,30 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import java.util.List;
 
+/**
+ * Конфигурация планировщика задач
+ *
+ * @author Yuri Luttsev
+ */
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
 public class SchedulerConfig {
 
+    /**
+     * Свойства планировщика
+     */
     private final SchedulerProperties schedulerProperties;
 
+    /**
+     * Объект планировщика задач
+     *
+     * @param triggers             триггеры планировщика
+     * @param jobDetails           информация о задаче
+     * @param schedulerFactoryBean бин фабрики планировщиков
+     * @return объект планировщика задач
+     * @throws SchedulerException ошибка планировщика задач
+     */
     @Bean
     public Scheduler scheduler(List<Trigger> triggers,
                                List<JobDetail> jobDetails,
@@ -33,6 +50,12 @@ public class SchedulerConfig {
         return scheduler;
     }
 
+    /**
+     * Перепланировка триггеров в планировщике задач
+     *
+     * @param triggers  триггеры планировщика
+     * @param scheduler планировщик задач
+     */
     private void rescheduleTriggers(List<Trigger> triggers, Scheduler scheduler) {
         triggers.forEach(
                 trigger -> {
@@ -49,6 +72,12 @@ public class SchedulerConfig {
         );
     }
 
+    /**
+     * Проверка невалидных задач в планировщике
+     *
+     * @param jobDetails информация о задаче
+     * @param scheduler  планировщик задач
+     */
     private void revalidateJobs(List<JobDetail> jobDetails, Scheduler scheduler) {
         List<JobKey> jobKeys = jobDetails.stream().map(JobDetail::getKey).toList();
         try {

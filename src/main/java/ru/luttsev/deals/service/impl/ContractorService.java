@@ -14,6 +14,11 @@ import ru.luttsev.deals.model.payload.dealstatus.SetMainBorrowerPayload;
 
 import java.net.URI;
 
+/**
+ * Сервис для работы с внешним сервисом контрагентов
+ *
+ * @author Yuri Luttsev
+ */
 @Service
 @RequiredArgsConstructor
 @PropertySources(
@@ -21,12 +26,25 @@ import java.net.URI;
 )
 public class ContractorService {
 
+    /**
+     * URL сервиса контрагентов
+     */
     @Value("${contractor.server.address}")
     private String contractorServiceAddress;
 
+    /**
+     * Порт сервиса контрагентов
+     */
     @Value("${contractor.server.port}")
     private Integer contractorServicePort;
 
+    /**
+     * Отправка параметра mainBorrower во внешний сервис контрагентов
+     *
+     * @param contractorId ID контрагента
+     * @param isMain       значение mainBorrower
+     * @return true если запрос успешно отправлен, false в случае ошибки
+     */
     public boolean sendMainBorrower(String contractorId, boolean isMain) {
         RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
         ResponseEntity<String> response = restTemplate.exchange(

@@ -13,6 +13,11 @@ import ru.luttsev.deals.service.DealContractorService;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Реализация сервиса для работы с ролями контрагентов
+ *
+ * @author Yuri Luttsev
+ */
 @Service
 @RequiredArgsConstructor
 public class ContractorRoleServiceImpl implements ContractorRoleService {

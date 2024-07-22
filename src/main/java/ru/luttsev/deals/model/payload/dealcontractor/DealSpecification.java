@@ -16,11 +16,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Класс для создания спецификации по поиску сделок
+ *
+ * @author Yuri Luttsev
+ */
 public final class DealSpecification {
 
     private DealSpecification() {
     }
 
+    /**
+     * Создает спецификацию поиска сделок по переданным фильтрам
+     *
+     * @param filters {@link DealFiltersPayload фильтры поиска сделок}
+     * @return {@link Specification спецификация} поиска сделок
+     */
     public static Specification<Deal> getSpecification(DealFiltersPayload filters) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();

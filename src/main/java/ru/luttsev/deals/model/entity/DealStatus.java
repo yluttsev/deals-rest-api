@@ -15,6 +15,11 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
 
+/**
+ * Сущность статуса сделки
+ *
+ * @author Yuri Luttsev
+ */
 @Entity
 @Table(name = "deal_status")
 @Getter

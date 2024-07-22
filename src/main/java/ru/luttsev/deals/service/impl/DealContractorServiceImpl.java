@@ -14,6 +14,11 @@ import ru.luttsev.deals.service.OutboxService;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Реализация сервиса для работы с контрагентами сделки
+ *
+ * @author Yuri Luttsev
+ */
 @Service
 @RequiredArgsConstructor
 public class DealContractorServiceImpl implements DealContractorService {

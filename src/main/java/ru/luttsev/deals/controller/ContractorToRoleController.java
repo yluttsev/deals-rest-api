@@ -12,21 +12,44 @@ import ru.luttsev.deals.model.payload.dealcontractor.DealContractorPayload;
 import ru.luttsev.deals.model.payload.dealcontractor.SetRoleToDealContractorPayload;
 import ru.luttsev.deals.service.ContractorRoleService;
 
+/**
+ * Контроллер для работы с ролями контрагентов
+ *
+ * @author Yuri Luttsev
+ */
 @RestController
 @RequestMapping("/contractor-to-role")
 @RequiredArgsConstructor
 public class ContractorToRoleController {
 
+    /**
+     * {@link ContractorRoleService Сервис для работы с ролями контрагентов}
+     */
     private final ContractorRoleService contractorRoleService;
 
+    /**
+     * {@link ModelMapper Маппер сущностей и DTO}
+     */
     private final ModelMapper mapper;
 
+    /**
+     * Назначает роль контрагенту сделки
+     *
+     * @param payload {@link SetRoleToDealContractorPayload DTO установки роли}
+     * @return {@link DealContractorPayload DTO контрагента сделки} с новой ролью
+     */
     @PostMapping("/add")
     public DealContractorPayload addRoleToDealContractor(@RequestBody SetRoleToDealContractorPayload payload) {
         DealContractor dealContractor = contractorRoleService.addRole(payload.getContractorId(), payload.getRoleId());
         return mapper.map(dealContractor, DealContractorPayload.class);
     }
 
+    /**
+     * Удаляет роль контрагенту сделки
+     *
+     * @param payload {@link SetRoleToDealContractorPayload DTO установки роли}
+     * @return {@link DealContractorPayload DTO контрагента сделки} с удаленной ролью
+     */
     @DeleteMapping("/delete")
     public DealContractorPayload deleteRoleToDealContractor(@RequestBody SetRoleToDealContractorPayload payload) {
         DealContractor dealContractor = contractorRoleService.deleteRole(payload.getContractorId(), payload.getRoleId());

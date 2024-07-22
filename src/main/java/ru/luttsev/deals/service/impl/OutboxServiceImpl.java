@@ -6,6 +6,11 @@ import ru.luttsev.deals.model.entity.Outbox;
 import ru.luttsev.deals.repository.OutboxRepository;
 import ru.luttsev.deals.service.OutboxService;
 
+/**
+ * Реализация сервиса для работы с outbox таблицей
+ *
+ * @author Yuri Luttsev
+ */
 @Service
 @RequiredArgsConstructor
 public class OutboxServiceImpl implements OutboxService {

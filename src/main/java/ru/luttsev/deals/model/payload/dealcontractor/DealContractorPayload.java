@@ -9,6 +9,11 @@ import ru.luttsev.deals.model.payload.contractorrole.ContractorRolePayload;
 
 import java.util.List;
 
+/**
+ * DTO контрагента сделки
+ *
+ * @author Yuri Luttsev
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

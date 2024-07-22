@@ -15,6 +15,11 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
 
+/**
+ * Сущность типа сделки
+ *
+ * @author Yuri Luttsev
+ */
 @Entity
 @Table(name = "deal_type")
 @Getter

@@ -12,6 +12,11 @@ import ru.luttsev.deals.model.payload.dealtype.DealTypePayload;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * DTO фильтров для поиска сделок
+ *
+ * @author Yuri Luttsev
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

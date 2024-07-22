@@ -19,6 +19,11 @@ import ru.luttsev.deals.service.DealService;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Реализация сервиса для работы со сделками
+ *
+ * @author Yuri Luttsev
+ */
 @Service
 @RequiredArgsConstructor
 public class DealServiceImpl implements DealService {
