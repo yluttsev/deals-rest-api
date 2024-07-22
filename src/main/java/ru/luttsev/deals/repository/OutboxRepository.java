@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface OutboxRepository extends JpaRepository<Outbox, UUID> {
 
-    @Query("select o from Outbox o order by o.id desc limit 1")
+    @Query("select o from Outbox o order by o.creationDate desc limit 1")
     Optional<Outbox> findLast();
 
 }
