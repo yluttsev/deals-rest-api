@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.luttsev.deals.exception.DealNotFoundException;
 import ru.luttsev.deals.model.entity.Deal;
+import ru.luttsev.deals.model.entity.DealContractor;
 import ru.luttsev.deals.model.payload.deal.DealFiltersPayload;
 import ru.luttsev.deals.model.payload.deal.DealPagePayload;
 import ru.luttsev.deals.model.payload.deal.DealPayload;
@@ -17,6 +18,7 @@ import ru.luttsev.deals.repository.DealRepository;
 import ru.luttsev.deals.service.DealService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -71,6 +73,11 @@ public class DealServiceImpl implements DealService {
     @Override
     public int numberOfActiveDeals(String contractorId) {
         return dealRepository.numberOfActiveDealsByContractorId(contractorId);
+    }
+
+    @Override
+    public Optional<DealContractor> getMainContractorByDealId(String dealId) {
+        return dealRepository.findMainContractorByDealId(dealId);
     }
 
 }
