@@ -1,8 +1,10 @@
 package ru.luttsev.deals.service;
 
+import ru.luttsev.deals.model.MessageStatus;
 import ru.luttsev.deals.model.entity.Outbox;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Сервис для работы с outbox таблицей
@@ -31,6 +33,6 @@ public interface OutboxService {
      * @param messageId     ID сообщения
      * @param messageStatus статус сообщения
      */
-    void updateMessageStatus(String messageId, String messageStatus);
+    void updateMessageStatus(UUID messageId, MessageStatus messageStatus);
 
 }

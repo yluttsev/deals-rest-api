@@ -43,7 +43,7 @@ public class SendMainBorrowerJob implements Job {
         errorMessages.forEach(message -> {
             boolean result = contractorService.sendMainBorrower(message.getContractorId(), message.isMain());
             if (result) {
-                outboxService.updateMessageStatus(message.getId().toString(), MessageStatus.SUCCESS.name());
+                outboxService.updateMessageStatus(message.getId(), MessageStatus.SUCCESS);
             }
         });
     }

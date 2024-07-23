@@ -2,11 +2,13 @@ package ru.luttsev.deals.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.luttsev.deals.model.MessageStatus;
 import ru.luttsev.deals.model.entity.Outbox;
 import ru.luttsev.deals.repository.OutboxRepository;
 import ru.luttsev.deals.service.OutboxService;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Реализация сервиса для работы с outbox таблицей
@@ -30,7 +32,7 @@ public class OutboxServiceImpl implements OutboxService {
     }
 
     @Override
-    public void updateMessageStatus(String messageId, String messageStatus) {
+    public void updateMessageStatus(UUID messageId, MessageStatus messageStatus) {
         outboxRepository.updateMessageStatus(messageId, messageStatus);
     }
 
