@@ -6,6 +6,8 @@ import ru.luttsev.deals.model.entity.Outbox;
 import ru.luttsev.deals.repository.OutboxRepository;
 import ru.luttsev.deals.service.OutboxService;
 
+import java.util.List;
+
 /**
  * Реализация сервиса для работы с outbox таблицей
  *
@@ -23,8 +25,8 @@ public class OutboxServiceImpl implements OutboxService {
     }
 
     @Override
-    public Outbox getLastMessage() {
-        return outboxRepository.findLast().orElseThrow();
+    public List<Outbox> getErrorMessages() {
+        return outboxRepository.findErrorMessages();
     }
 
 }

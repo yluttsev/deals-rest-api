@@ -2,6 +2,8 @@ package ru.luttsev.deals.service;
 
 import ru.luttsev.deals.model.entity.Outbox;
 
+import java.util.List;
+
 /**
  * Сервис для работы с outbox таблицей
  *
@@ -21,6 +23,6 @@ public interface OutboxService {
      *
      * @return последнее сообщение
      */
-    Outbox getLastMessage();
+    List<Outbox> getErrorMessages();
 
 }
