@@ -66,7 +66,7 @@ public class DealStatusServiceImpl implements DealStatusService {
         Optional<DealContractor> contractor = deal.getContractors().stream()
                 .filter(DealContractor::isMain)
                 .findFirst();
-        if (contractor.isPresent()) {
+        if (contractor.isPresent() && dealService.numberOfActiveDeals(contractor.get().getContractorId()) <= 1) {
             if (deal.getStatus().getId().equals("DRAFT") && status.getId().equals("ACTIVE")) {
                 return sendMessageAndSaveStatus(contractor.get().getContractorId(), deal, status, true);
             } else if (deal.getStatus().getId().equals("ACTIVE") && status.getId().equals("CLOSED")) {

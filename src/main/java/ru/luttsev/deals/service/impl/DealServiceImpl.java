@@ -68,4 +68,9 @@ public class DealServiceImpl implements DealService {
                 .build();
     }
 
+    @Override
+    public int numberOfActiveDeals(String contractorId) {
+        return dealRepository.numberOfActiveDealsByContractorId(contractorId);
+    }
+
 }
