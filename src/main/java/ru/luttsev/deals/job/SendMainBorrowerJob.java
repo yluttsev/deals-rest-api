@@ -10,6 +10,8 @@ import ru.luttsev.deals.model.entity.Outbox;
 import ru.luttsev.deals.service.OutboxService;
 import ru.luttsev.deals.service.impl.ContractorService;
 
+import java.util.List;
+
 /**
  * Задача отправки сообщений в сервис контрагентов
  *
@@ -31,15 +33,19 @@ public class SendMainBorrowerJob implements Job {
 
     /**
      * Выполняемая работа по отправке сообщений
+     *
      * @param jobExecutionContext контекст выполнения задачи
      * @throws JobExecutionException ошибка выполнения задачи
      */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        Outbox lastOutbox = outboxService.getLastMessage();
-        if (lastOutbox.getStatus().equals(MessageStatus.ERROR)) {
-            contractorService.sendMainBorrower(lastOutbox.getContractorId(), lastOutbox.isMain());
-        }
+        List<Outbox> errorMessages = outboxService.getErrorMessages();
+        errorMessages.forEach(message -> {
+            boolean result = contractorService.sendMainBorrower(message.getContractorId(), message.isMain());
+            if (result) {
+                outboxService.updateMessageStatus(message.getId().toString(), MessageStatus.SUCCESS.name());
+            }
+        });
     }
 
 }
