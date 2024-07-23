@@ -19,12 +19,18 @@ public interface OutboxService {
     void save(Outbox message);
 
     /**
-     * Получение последнего сообщения из таблицы
+     * Получение неудачно отправленных сообщений
      *
-     * @return последнее сообщение
+     * @return список неудачно отправленных сообщений
      */
     List<Outbox> getErrorMessages();
 
+    /**
+     * Обновление статуса сообщения
+     *
+     * @param messageId     ID сообщения
+     * @param messageStatus статус сообщения
+     */
     void updateMessageStatus(String messageId, String messageStatus);
 
 }
