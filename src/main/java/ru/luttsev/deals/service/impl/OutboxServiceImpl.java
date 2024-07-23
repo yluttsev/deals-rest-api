@@ -29,4 +29,9 @@ public class OutboxServiceImpl implements OutboxService {
         return outboxRepository.findErrorMessages();
     }
 
+    @Override
+    public void updateMessageStatus(String messageId, String messageStatus) {
+        outboxRepository.updateMessageStatus(messageId, messageStatus);
+    }
+
 }

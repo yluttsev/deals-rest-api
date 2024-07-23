@@ -1,7 +1,9 @@
 package ru.luttsev.deals.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.luttsev.deals.model.entity.Outbox;
 
@@ -13,5 +15,9 @@ public interface OutboxRepository extends JpaRepository<Outbox, UUID> {
 
     @Query("select o from Outbox o where o.status = 'ERROR'")
     List<Outbox> findErrorMessages();
+
+    @Modifying
+    @Query("update Outbox o set o.status = :messageStatus where o.id = :messageId")
+    void updateMessageStatus(@Param("messageId") String messageId, String messageStatus);
 
 }

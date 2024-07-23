@@ -25,4 +25,6 @@ public interface OutboxService {
      */
     List<Outbox> getErrorMessages();
 
+    void updateMessageStatus(String messageId, String messageStatus);
+
 }
