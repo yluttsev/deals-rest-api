@@ -15,4 +15,6 @@ public interface DealService extends CrudService<Deal, UUID> {
 
     DealPagePayload getByFilters(DealFiltersPayload filters, int page, int contentSize);
 
+    int numberOfActiveDeals(String contractorId);
+
 }
