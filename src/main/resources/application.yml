@@ -32,3 +32,7 @@ spring:
 
 server:
   port: 8081
+
+auditlib:
+  appender: file
+  log-level: INFO
