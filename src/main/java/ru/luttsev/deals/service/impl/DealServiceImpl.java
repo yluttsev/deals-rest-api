@@ -80,4 +80,9 @@ public class DealServiceImpl implements DealService {
         return dealRepository.findMainContractorByDealId(dealId);
     }
 
+    @Override
+    public Deal getDealByContractorId(String contractorId) {
+        return dealRepository.findDealByDealContractorId(contractorId);
+    }
+
 }

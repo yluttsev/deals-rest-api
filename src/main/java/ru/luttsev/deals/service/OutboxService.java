@@ -35,4 +35,6 @@ public interface OutboxService {
      */
     void updateMessageStatus(UUID messageId, MessageStatus messageStatus);
 
+    void resendMessage();
+
 }

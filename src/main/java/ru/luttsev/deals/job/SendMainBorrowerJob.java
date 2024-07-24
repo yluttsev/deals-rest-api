@@ -5,12 +5,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.stereotype.Component;
-import ru.luttsev.deals.model.MessageStatus;
-import ru.luttsev.deals.model.entity.Outbox;
 import ru.luttsev.deals.service.OutboxService;
-import ru.luttsev.deals.service.impl.ContractorService;
-
-import java.util.List;
 
 /**
  * Задача отправки сообщений в сервис контрагентов
@@ -27,11 +22,6 @@ public class SendMainBorrowerJob implements Job {
     private final OutboxService outboxService;
 
     /**
-     * {@link ContractorService Сервис для работы с внешним сервисом контрагентов}
-     */
-    private final ContractorService contractorService;
-
-    /**
      * Выполняемая работа по отправке сообщений
      *
      * @param jobExecutionContext контекст выполнения задачи
@@ -39,13 +29,7 @@ public class SendMainBorrowerJob implements Job {
      */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        List<Outbox> errorMessages = outboxService.getErrorMessages();
-        errorMessages.forEach(message -> {
-            boolean result = contractorService.sendMainBorrower(message.getContractorId(), message.isMain());
-            if (result) {
-                outboxService.updateMessageStatus(message.getId(), MessageStatus.SUCCESS);
-            }
-        });
+        outboxService.resendMessage();
     }
 
 }

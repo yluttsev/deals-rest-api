@@ -21,4 +21,7 @@ public interface DealRepository extends JpaRepository<Deal, UUID>, JpaSpecificat
     @Query("select d_c from DealContractor d_c where d_c.deal.id = :dealId and d_c.main = true")
     Optional<DealContractor> findMainContractorByDealId(@Param("dealId") String dealId);
 
+    @Query("select d_c.deal from DealContractor d_c where d_c.contractorId = :contractorId")
+    Deal findDealByDealContractorId(@Param("contractorId") String contractorId);
+
 }
