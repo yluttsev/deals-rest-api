@@ -28,7 +28,7 @@ import ru.luttsev.deals.model.payload.deal.SaveDealPayload;
 import ru.luttsev.deals.service.DealService;
 import ru.luttsev.deals.service.DealStatusService;
 import ru.luttsev.springbootstarterauditlib.LogLevel;
-import ru.luttsev.springbootstarterauditlib.annotation.AuditLog;
+import ru.luttsev.springbootstarterauditlib.annotation.WebAuditLog;
 
 import java.util.UUID;
 
@@ -91,7 +91,7 @@ public class DealController {
                     }
             )
     })
-    @AuditLog(logLevel = LogLevel.INFO)
+    @WebAuditLog(logLevel = LogLevel.INFO)
     @GetMapping("/{id}")
     public DealPayload getDealById(
             @Parameter(name = "id",
@@ -136,7 +136,7 @@ public class DealController {
                     }
             )
     })
-    @AuditLog(logLevel = LogLevel.INFO)
+    @WebAuditLog(logLevel = LogLevel.INFO)
     @PutMapping("/save")
     public DealPayload saveDeal(@RequestBody SaveDealPayload payload) {
         Deal deal = mapper.map(payload, Deal.class);
@@ -177,7 +177,7 @@ public class DealController {
                     }
             )
     })
-    @AuditLog(logLevel = LogLevel.INFO)
+    @WebAuditLog(logLevel = LogLevel.INFO)
     @PatchMapping("/change/status")
     public DealPayload changeDealStatus(@RequestBody ChangeDealStatusPayload payload) {
         Deal deal = dealStatusService.updateStatus(payload.getDealId(), payload.getStatusId());
@@ -207,7 +207,7 @@ public class DealController {
                     }
             )
     })
-    @AuditLog(logLevel = LogLevel.INFO)
+    @WebAuditLog(logLevel = LogLevel.INFO)
     @PostMapping("/search")
     public DealPagePayload searchDeals(@RequestBody DealFiltersPayload filtersPayload,
                                        @RequestParam(name = "page", defaultValue = "0") int page,
