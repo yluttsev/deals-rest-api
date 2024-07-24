@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.luttsev.deals.exception.DealStatusNotFoundException;
+import ru.luttsev.deals.model.MessageAction;
 import ru.luttsev.deals.model.MessageStatus;
 import ru.luttsev.deals.model.entity.Deal;
 import ru.luttsev.deals.model.entity.DealContractor;
@@ -66,9 +67,9 @@ public class DealStatusServiceImpl implements DealStatusService {
         Optional<DealContractor> contractor = dealService.getMainContractorByDealId(dealId);
         if (contractor.isPresent() && dealService.numberOfActiveDeals(contractor.get().getContractorId()) <= 1) {
             if (deal.getStatus().getId().equals("DRAFT") && status.getId().equals("ACTIVE")) {
-                return sendMessageAndSaveStatus(contractor.get().getContractorId(), deal, status, true);
+                return sendMessageAndSaveStatus(contractor.get().getContractorId(), deal, status, true, MessageAction.CHANGE_STATUS_ACTIVE);
             } else if (deal.getStatus().getId().equals("ACTIVE") && status.getId().equals("CLOSED")) {
-                return sendMessageAndSaveStatus(contractor.get().getContractorId(), deal, status, false);
+                return sendMessageAndSaveStatus(contractor.get().getContractorId(), deal, status, false, MessageAction.CHANGE_STATUS_CLOSED);
             }
         }
 
@@ -79,7 +80,8 @@ public class DealStatusServiceImpl implements DealStatusService {
     private Deal sendMessageAndSaveStatus(String contractorId,
                                           Deal deal,
                                           DealStatus status,
-                                          boolean isMain) {
+                                          boolean isMain,
+                                          MessageAction action) {
         deal.setStatus(status);
         Deal savedDeal = dealService.save(deal);
         boolean sendMainBorrowerResult = contractorService.sendMainBorrower(contractorId, isMain);
@@ -87,6 +89,7 @@ public class DealStatusServiceImpl implements DealStatusService {
                 .contractorId(contractorId)
                 .isMain(isMain)
                 .status(sendMainBorrowerResult ? MessageStatus.SUCCESS : MessageStatus.ERROR)
+                .action(action)
                 .build();
         outboxService.save(outboxMessage);
         return savedDeal;

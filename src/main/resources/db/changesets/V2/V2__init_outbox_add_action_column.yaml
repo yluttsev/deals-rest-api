@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 11
+      author: yluttsev
+      changes:
+        - addColumn:
+            tableName: outbox
+            columns:
+              - column:
+                  name: action
+                  type: text
