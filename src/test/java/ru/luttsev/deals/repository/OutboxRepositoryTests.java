@@ -5,12 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import ru.luttsev.deals.PostgresContainerConfig;
 import ru.luttsev.deals.model.MessageStatus;
 import ru.luttsev.deals.model.entity.Outbox;
 
@@ -18,24 +14,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-@Testcontainers
+@SpringBootTest(classes = PostgresContainerConfig.class)
 @Transactional
 class OutboxRepositoryTests {
-
-    @Container
-    public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15")
-            .withDatabaseName("outbox")
-            .withUsername("postgres")
-            .withPassword("postgres");
-
-    @DynamicPropertySource
-    private static void setTestProperties(DynamicPropertyRegistry propertyRegistry) {
-        propertyRegistry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
-        propertyRegistry.add("spring.datasource.username", postgreSQLContainer::getUsername);
-        propertyRegistry.add("spring.datasource.password", postgreSQLContainer::getPassword);
-        propertyRegistry.add("spring.datasource.driver-class-name", postgreSQLContainer::getDriverClassName);
-    }
 
     @Autowired
     private OutboxRepository outboxRepository;
