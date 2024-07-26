@@ -5,16 +5,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.luttsev.deals.model.MessageAction;
 import ru.luttsev.deals.model.MessageStatus;
-import ru.luttsev.deals.model.entity.Deal;
-import ru.luttsev.deals.model.entity.DealStatus;
 import ru.luttsev.deals.model.entity.Outbox;
 import ru.luttsev.deals.repository.OutboxRepository;
 
-import java.util.Collections;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -25,31 +24,34 @@ class OutboxServiceImplTests {
     private OutboxRepository outboxRepository;
 
     @Mock
-    private DealServiceImpl dealService;
+    private ContractorService contractorService;
 
     @InjectMocks
     private OutboxServiceImpl outboxService;
 
     @Test
-    @DisplayName("Повторная отправка сообщения без актуального статуса")
-    void testResendFailureMessageWithoutActualStatus() {
-        Outbox failureMessage = Outbox.builder()
+    @DisplayName("Отправка сообщений со статусом CREATED")
+    void testSendCreatedMessages() {
+        Outbox createdMessage1 = Outbox.builder()
                 .contractorId("test_id")
-                .status(MessageStatus.ERROR)
                 .isMain(true)
-                .action(MessageAction.CHANGE_STATUS_ACTIVE)
+                .status(MessageStatus.CREATED)
                 .build();
-        Deal deal = Deal.builder()
-                .status(
-                        DealStatus.builder()
-                                .id("CLOSED")
-                                .name("Закрытая")
-                                .build()
-                ).build();
-        when(outboxRepository.findErrorMessages()).thenReturn(Collections.singletonList(failureMessage));
-        when(dealService.getDealByContractorId("test_id")).thenReturn(deal);
+        Outbox createdMessage2 = Outbox.builder()
+                .contractorId("test_id2")
+                .isMain(false)
+                .status(MessageStatus.CREATED)
+                .build();
+        when(outboxRepository.findByStatus(MessageStatus.CREATED)).thenReturn(List.of(createdMessage1, createdMessage2));
+        when(contractorService.sendMainBorrower(createdMessage1.getContractorId(), createdMessage1.isMain())).thenReturn(true);
+        when(contractorService.sendMainBorrower(createdMessage2.getContractorId(), createdMessage2.isMain())).thenReturn(false);
+
         outboxService.resendMessage();
-        assertEquals(MessageStatus.SUCCESS, failureMessage.getStatus());
+
+        assertAll(
+                () -> assertEquals(createdMessage1.getStatus(), MessageStatus.SUCCESS),
+                () -> assertEquals(createdMessage2.getStatus(), MessageStatus.CREATED)
+        );
     }
 
 }

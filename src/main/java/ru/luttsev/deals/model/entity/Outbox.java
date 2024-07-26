@@ -16,7 +16,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.data.annotation.CreatedDate;
-import ru.luttsev.deals.model.MessageAction;
 import ru.luttsev.deals.model.MessageStatus;
 
 import java.time.LocalDateTime;
@@ -48,10 +47,6 @@ public class Outbox {
 
     @Column(name = "is_main", nullable = false)
     private boolean isMain;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "action")
-    private MessageAction action;
 
     @CreatedDate
     @Column(name = "creation_date", nullable = false, insertable = false, updatable = false)

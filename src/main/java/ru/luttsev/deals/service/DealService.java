@@ -19,8 +19,6 @@ public interface DealService extends CrudService<Deal, UUID> {
 
     int numberOfActiveDeals(String contractorId);
 
-    Optional<DealContractor> getMainContractorByDealId(String dealId);
-
-    Deal getDealByContractorId(String contractorId);
+    Optional<DealContractor> getMainContractorByDealId(UUID dealId);
 
 }

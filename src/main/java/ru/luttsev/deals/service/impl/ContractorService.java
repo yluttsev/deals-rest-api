@@ -47,16 +47,20 @@ public class ContractorService {
      */
     public boolean sendMainBorrower(String contractorId, boolean isMain) {
         RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
-        ResponseEntity<String> response = restTemplate.exchange(
-                URI.create("http://%s:%s/contractor/main-borrower".formatted(contractorServiceAddress, contractorServicePort)),
-                HttpMethod.PATCH,
-                new HttpEntity<>(SetMainBorrowerPayload.builder()
-                        .contractorId(contractorId)
-                        .mainBorrower(isMain)
-                        .build()),
-                String.class
-        );
-        return response.getStatusCode().is2xxSuccessful();
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    URI.create("http://%s:%s/contractor/main-borrower".formatted(contractorServiceAddress, contractorServicePort)),
+                    HttpMethod.PATCH,
+                    new HttpEntity<>(SetMainBorrowerPayload.builder()
+                            .contractorId(contractorId)
+                            .mainBorrower(isMain)
+                            .build()),
+                    String.class
+            );
+            return response.getStatusCode().is2xxSuccessful();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

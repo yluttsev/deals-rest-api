@@ -1,10 +1,6 @@
 package ru.luttsev.deals.service;
 
-import ru.luttsev.deals.model.MessageStatus;
 import ru.luttsev.deals.model.entity.Outbox;
-
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Сервис для работы с outbox таблицей
@@ -25,15 +21,7 @@ public interface OutboxService {
      *
      * @return список неудачно отправленных сообщений
      */
-    List<Outbox> getErrorMessages();
-
-    /**
-     * Обновление статуса сообщения
-     *
-     * @param messageId     ID сообщения
-     * @param messageStatus статус сообщения
-     */
-    void updateMessageStatus(UUID messageId, MessageStatus messageStatus);
+    Outbox getLastOutboxMessage(String contractorId);
 
     void resendMessage();
 

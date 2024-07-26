@@ -1,17 +1,14 @@
 package ru.luttsev.deals.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.luttsev.deals.model.MessageAction;
 import ru.luttsev.deals.model.MessageStatus;
-import ru.luttsev.deals.model.entity.Deal;
 import ru.luttsev.deals.model.entity.Outbox;
 import ru.luttsev.deals.repository.OutboxRepository;
-import ru.luttsev.deals.service.DealService;
 import ru.luttsev.deals.service.OutboxService;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Реализация сервиса для работы с outbox таблицей
@@ -22,11 +19,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OutboxServiceImpl implements OutboxService {
 
-    private final OutboxRepository outboxRepository;
-
     private final ContractorService contractorService;
 
-    private final DealService dealService;
+    private final OutboxRepository outboxRepository;
 
     @Override
     public void save(Outbox message) {
@@ -34,36 +29,20 @@ public class OutboxServiceImpl implements OutboxService {
     }
 
     @Override
-    public List<Outbox> getErrorMessages() {
-        return outboxRepository.findErrorMessages();
+    public Outbox getLastOutboxMessage(String contractorId) {
+        return outboxRepository.findByContractorId(contractorId).orElse(null);
     }
 
     @Override
-    public void updateMessageStatus(UUID messageId, MessageStatus messageStatus) {
-        outboxRepository.updateMessageStatus(messageId, messageStatus);
-    }
-
-    @Override
+    @Transactional
     public void resendMessage() {
-        List<Outbox> errorMessages = this.getErrorMessages();
-        errorMessages.forEach(message -> {
-            if (isResend(message)) {
-                boolean result = contractorService.sendMainBorrower(message.getContractorId(), message.isMain());
-                if (result) {
-                    message.setStatus(MessageStatus.SUCCESS);
-                }
+        List<Outbox> outboxMessages = outboxRepository.findByStatus(MessageStatus.CREATED);
+        outboxMessages.forEach(outboxMessage -> {
+            boolean result = contractorService.sendMainBorrower(outboxMessage.getContractorId(), outboxMessage.isMain());
+            if (result) {
+                outboxMessage.setStatus(MessageStatus.SUCCESS);
             }
         });
-    }
-
-    private boolean isResend(Outbox outbox) {
-        Deal deal = dealService.getDealByContractorId(outbox.getContractorId());
-        if (deal.getStatus().getId().equals("CLOSED") && outbox.getAction().equals(MessageAction.CHANGE_STATUS_ACTIVE)) {
-            outbox.setStatus(MessageStatus.SUCCESS);
-            this.save(outbox);
-            return false;
-        }
-        return true;
     }
 
 }

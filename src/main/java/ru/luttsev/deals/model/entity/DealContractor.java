@@ -68,7 +68,7 @@ public class DealContractor {
     @Column(name = "inn")
     private String inn;
 
-    @Column(name = "main", nullable = false, unique = true)
+    @Column(name = "main", nullable = false)
     private boolean main = false;
 
     @Column(name = "create_date", nullable = false, insertable = false, updatable = false)

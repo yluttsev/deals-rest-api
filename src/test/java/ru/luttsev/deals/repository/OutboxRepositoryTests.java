@@ -11,8 +11,10 @@ import ru.luttsev.deals.model.MessageStatus;
 import ru.luttsev.deals.model.entity.Outbox;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(classes = PostgresContainerConfig.class)
 @Transactional
@@ -23,21 +25,18 @@ class OutboxRepositoryTests {
 
     @Test
     @Sql("/db/outbox/insert_outbox_data.sql")
-    @DisplayName("Получение сообщений со статусом ERROR")
-    void testFindErrorMessages() {
-        List<Outbox> errorMessages = outboxRepository.findErrorMessages();
-        assertEquals(errorMessages.size(), 2);
+    @DisplayName("Получение статуса для contractorId")
+    void testFindByContractorId() {
+        Optional<Outbox> outbox = outboxRepository.findByContractorId("test_id");
+        assertTrue(outbox.isPresent());
     }
 
     @Test
     @Sql("/db/outbox/insert_outbox_data.sql")
-    @DisplayName("Обновление статуса сообщения")
-    void testUpdateMessageStatus() {
-        List<Outbox> errorMessages = outboxRepository.findErrorMessages();
-        errorMessages.forEach(message -> {
-            outboxRepository.updateMessageStatus(message.getId(), MessageStatus.SUCCESS);
-        });
-        assertEquals(outboxRepository.findErrorMessages().size(), 0);
+    @DisplayName("Получение всех сообщений с определенным статусом")
+    void testFindByStatus() {
+        List<Outbox> messages = outboxRepository.findByStatus(MessageStatus.CREATED);
+        assertEquals(messages.size(), 2);
     }
 
 }

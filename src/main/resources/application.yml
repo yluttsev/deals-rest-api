@@ -27,6 +27,7 @@ spring:
             threadCount: 10
             threadsInheritContextClassLoaderOfInitializingThread: true
     auto-startup: false
+    overwrite-existing-jobs: true
   datasource:
     driver-class-name: org.postgresql.Driver
     url:

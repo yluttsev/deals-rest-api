@@ -20,6 +20,6 @@ public class SchedulerProperties {
     /**
      * cron расписание
      */
-    private String cron = "0 * * ? * * *";
+    private String cron = "*/3 * * * * ?";
 
 }

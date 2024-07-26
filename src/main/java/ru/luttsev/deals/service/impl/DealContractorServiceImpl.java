@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.luttsev.deals.exception.DealContractorNotFoundException;
-import ru.luttsev.deals.model.MessageAction;
 import ru.luttsev.deals.model.MessageStatus;
 import ru.luttsev.deals.model.entity.DealContractor;
 import ru.luttsev.deals.model.entity.Outbox;
@@ -52,14 +51,17 @@ public class DealContractorServiceImpl implements DealContractorService {
     public void deleteById(UUID id) {
         DealContractor dealContractor = this.getById(id);
         if (dealContractor.isMain()) {
-            boolean sendMainBorrowerResult = contractorService.sendMainBorrower(dealContractor.getContractorId(), false);
-            Outbox message = Outbox.builder()
-                    .contractorId(dealContractor.getContractorId())
-                    .isMain(false)
-                    .status(sendMainBorrowerResult ? MessageStatus.SUCCESS : MessageStatus.ERROR)
-                    .action(MessageAction.DELETE_CONTRACTOR)
-                    .build();
-            outboxService.save(message);
+            Outbox lastOutboxMessage = outboxService.getLastOutboxMessage(dealContractor.getContractorId());
+            if (lastOutboxMessage != null) {
+                lastOutboxMessage.setMain(false);
+            } else {
+                lastOutboxMessage = Outbox.builder()
+                        .contractorId(dealContractor.getContractorId())
+                        .isMain(false)
+                        .status(MessageStatus.CREATED)
+                        .build();
+            }
+            outboxService.save(lastOutboxMessage);
         }
         dealContractor.setActive(false);
         this.save(dealContractor);

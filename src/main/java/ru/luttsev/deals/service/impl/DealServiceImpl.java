@@ -76,13 +76,8 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public Optional<DealContractor> getMainContractorByDealId(String dealId) {
+    public Optional<DealContractor> getMainContractorByDealId(UUID dealId) {
         return dealRepository.findMainContractorByDealId(dealId);
-    }
-
-    @Override
-    public Deal getDealByContractorId(String contractorId) {
-        return dealRepository.findDealByDealContractorId(contractorId);
     }
 
 }

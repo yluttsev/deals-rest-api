@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.luttsev.deals.exception.DealStatusNotFoundException;
-import ru.luttsev.deals.model.MessageAction;
 import ru.luttsev.deals.model.MessageStatus;
 import ru.luttsev.deals.model.entity.Deal;
 import ru.luttsev.deals.model.entity.DealContractor;
@@ -64,12 +63,12 @@ public class DealStatusServiceImpl implements DealStatusService {
         DealStatus status = this.getById(statusId);
         Deal deal = dealService.getById(UUID.fromString(dealId));
 
-        Optional<DealContractor> contractor = dealService.getMainContractorByDealId(dealId);
+        Optional<DealContractor> contractor = dealService.getMainContractorByDealId(deal.getId());
         if (contractor.isPresent() && dealService.numberOfActiveDeals(contractor.get().getContractorId()) <= 1) {
             if (deal.getStatus().getId().equals("DRAFT") && status.getId().equals("ACTIVE")) {
-                return sendMessageAndSaveStatus(contractor.get().getContractorId(), deal, status, true, MessageAction.CHANGE_STATUS_ACTIVE);
+                return saveStatusAndOutboxMessage(contractor.get().getContractorId(), deal, status, true);
             } else if (deal.getStatus().getId().equals("ACTIVE") && status.getId().equals("CLOSED")) {
-                return sendMessageAndSaveStatus(contractor.get().getContractorId(), deal, status, false, MessageAction.CHANGE_STATUS_CLOSED);
+                return saveStatusAndOutboxMessage(contractor.get().getContractorId(), deal, status, false);
             }
         }
 
@@ -77,22 +76,25 @@ public class DealStatusServiceImpl implements DealStatusService {
         return dealService.save(deal);
     }
 
-    private Deal sendMessageAndSaveStatus(String contractorId,
-                                          Deal deal,
-                                          DealStatus status,
-                                          boolean isMain,
-                                          MessageAction action) {
+    private Deal saveStatusAndOutboxMessage(String contractorId,
+                                            Deal deal,
+                                            DealStatus status,
+                                            boolean isMain) {
         deal.setStatus(status);
-        Deal savedDeal = dealService.save(deal);
-        boolean sendMainBorrowerResult = contractorService.sendMainBorrower(contractorId, isMain);
-        Outbox outboxMessage = Outbox.builder()
-                .contractorId(contractorId)
-                .isMain(isMain)
-                .status(sendMainBorrowerResult ? MessageStatus.SUCCESS : MessageStatus.ERROR)
-                .action(action)
-                .build();
-        outboxService.save(outboxMessage);
-        return savedDeal;
+        Deal updatedDeal = dealService.save(deal);
+
+        Outbox lastContractorMessage = outboxService.getLastOutboxMessage(contractorId);
+        if (lastContractorMessage != null) {
+            lastContractorMessage.setMain(isMain);
+        } else {
+            lastContractorMessage = Outbox.builder()
+                    .contractorId(contractorId)
+                    .isMain(isMain)
+                    .status(MessageStatus.CREATED)
+                    .build();
+        }
+        outboxService.save(lastContractorMessage);
+        return updatedDeal;
     }
 
 }
