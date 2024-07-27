@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 12
+      author: yluttsev
+      changes:
+        - dropColumn:
+            tableName: outbox
+            columnName: action

@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: deals-rest-api
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  liquibase:
+    change-log: db/changelog/changelog-master.yaml
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceId: AUTO
+          jobStore:
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+            useProperties: false
+            tablePrefix: QRTZ_
+            clusterCheckinInterval: 5000
+            isClustered: true
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadsInheritContextClassLoaderOfInitializingThread: true
+    auto-startup: false
+    overwrite-existing-jobs: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url:
+    username:
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+server:
+  port: 8081
+
+auditlib:
+  appender: file
+  log-level: INFO
