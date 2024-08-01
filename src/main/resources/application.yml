@@ -38,8 +38,12 @@ spring:
       ddl-auto: none
 
 server:
-  port: 8081
+  port: 8082
 
 auditlib:
   appender: file
   log-level: INFO
+
+jwt:
+  access:
+    secret:

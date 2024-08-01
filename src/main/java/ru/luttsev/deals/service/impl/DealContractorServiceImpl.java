@@ -2,6 +2,7 @@ package ru.luttsev.deals.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.luttsev.deals.exception.DealContractorNotFoundException;
 import ru.luttsev.deals.model.MessageStatus;
@@ -21,11 +22,10 @@ import java.util.UUID;
  */
 @Service
 @RequiredArgsConstructor
+@PreAuthorize("!hasRole('ADMIN')")
 public class DealContractorServiceImpl implements DealContractorService {
 
     private final DealContractorRepository dealContractorRepository;
-
-    private final ContractorService contractorService;
 
     private final OutboxService outboxService;
 
@@ -42,12 +42,14 @@ public class DealContractorServiceImpl implements DealContractorService {
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     public DealContractor save(DealContractor entity) {
         return dealContractorRepository.save(entity);
     }
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     public void deleteById(UUID id) {
         DealContractor dealContractor = this.getById(id);
         if (dealContractor.isMain()) {

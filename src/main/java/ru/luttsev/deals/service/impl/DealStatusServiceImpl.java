@@ -2,6 +2,7 @@ package ru.luttsev.deals.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.luttsev.deals.exception.DealStatusNotFoundException;
 import ru.luttsev.deals.model.MessageStatus;
@@ -25,6 +26,7 @@ import java.util.UUID;
  */
 @Service
 @RequiredArgsConstructor
+@PreAuthorize("!hasRole('ADMIN')")
 public class DealStatusServiceImpl implements DealStatusService {
 
     private final DealStatusRepository dealStatusRepository;
@@ -32,8 +34,6 @@ public class DealStatusServiceImpl implements DealStatusService {
     private final DealService dealService;
 
     private final OutboxService outboxService;
-
-    private final ContractorService contractorService;
 
     @Override
     public List<DealStatus> getAll() {
@@ -59,6 +59,7 @@ public class DealStatusServiceImpl implements DealStatusService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     public Deal updateStatus(String dealId, String statusId) {
         DealStatus status = this.getById(statusId);
         Deal deal = dealService.getById(UUID.fromString(dealId));
