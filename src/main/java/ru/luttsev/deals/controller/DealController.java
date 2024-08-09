@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ProblemDetail;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -211,8 +213,9 @@ public class DealController {
     @PostMapping("/search")
     public DealPagePayload searchDeals(@RequestBody DealFiltersPayload filtersPayload,
                                        @RequestParam(name = "page", defaultValue = "0") int page,
-                                       @RequestParam(name = "contentSize", defaultValue = "10") int contentSize) {
-        return dealService.getByFilters(filtersPayload, page, contentSize);
+                                       @RequestParam(name = "contentSize", defaultValue = "10") int contentSize,
+                                       @AuthenticationPrincipal UserDetails userDetails) {
+        return dealService.getByFiltersWithCheckRole(filtersPayload, page, contentSize, userDetails);
     }
 
 }
