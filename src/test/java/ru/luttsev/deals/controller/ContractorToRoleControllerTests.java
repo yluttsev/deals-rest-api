@@ -6,12 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.luttsev.deals.TestApplicationConfig;
 import ru.luttsev.deals.model.entity.ContractorRole;
 import ru.luttsev.deals.model.entity.DealContractor;
 import ru.luttsev.deals.model.payload.dealcontractor.DealContractorPayload;
@@ -28,8 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = {ContractorToRoleController.class})
-@Import(TestApplicationConfig.class)
+@SpringBootTest
+@WithMockUser(roles = {"USER", "SUPERUSER"})
 @AutoConfigureMockMvc
 class ContractorToRoleControllerTests {
 
