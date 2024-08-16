@@ -36,13 +36,27 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: user
+    listener:
+      simple:
+        default-requeue-rejected: false
+
+rabbitmq:
+  contractor-queue: deals_contractor_queue
+  dead-exchange: deals_dead_exchange
+  dead-queue: deal_contractor_dead_queue
+  dead-contractor-exchange: deal_contractor_dead_exchange
 
 server:
   port: 8082
 
 auditlib:
-  appender: file
   log-level: INFO
+  enable-file-logging: true
 
 jwt:
   access:
