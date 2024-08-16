@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ProblemDetail;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +44,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/deal")
 @RequiredArgsConstructor
+@PreAuthorize("!hasRole('ADMIN')")
 public class DealController {
 
     /**
@@ -138,6 +140,7 @@ public class DealController {
                     }
             )
     })
+    @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     @WebAuditLog(logLevel = LogLevel.INFO)
     @PutMapping("/save")
     public DealPayload saveDeal(@RequestBody SaveDealPayload payload) {
@@ -179,6 +182,7 @@ public class DealController {
                     }
             )
     })
+    @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     @WebAuditLog(logLevel = LogLevel.INFO)
     @PatchMapping("/change/status")
     public DealPayload changeDealStatus(@RequestBody ChangeDealStatusPayload payload) {
@@ -209,6 +213,7 @@ public class DealController {
                     }
             )
     })
+    @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER', 'CREDIT_USER', 'OVERDRAFT_USER')")
     @WebAuditLog(logLevel = LogLevel.INFO)
     @PostMapping("/search")
     public DealPagePayload searchDeals(@RequestBody DealFiltersPayload filtersPayload,
