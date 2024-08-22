@@ -28,6 +28,18 @@ public class RabbitConfig {
     @Value("${rabbitmq.dead-contractor-exchange}")
     private String deadContractorExchangeName;
 
+    @Value("${rabbitmq.main-borrower-exchange}")
+    private String mainBorrowerExchangeName;
+
+    @Value("${rabbitmq.main-borrower-queue}")
+    private String mainBorrowerQueueName;
+
+    @Value("${rabbitmq.contractor-exchange}")
+    private String contractorExchangeName;
+
+    @Value("${rabbitmq.message-ttl}")
+    private Integer messageTtl;
+
     @Bean
     public Queue dealsContractorQueue() {
         return QueueBuilder
@@ -41,7 +53,7 @@ public class RabbitConfig {
         return QueueBuilder
                 .durable(deadQueueName)
                 .deadLetterExchange(deadContractorExchangeName)
-                .ttl(300000)
+                .ttl(messageTtl)
                 .build();
     }
 
@@ -66,6 +78,45 @@ public class RabbitConfig {
         return BindingBuilder
                 .bind(dealContractorDeadQueue())
                 .to(dealsDeadExchange());
+    }
+
+    @Bean
+    public DirectExchange contractorsContractorExchange() {
+        return ExchangeBuilder
+                .directExchange(contractorExchangeName)
+                .durable(true)
+                .build();
+    }
+
+    @Bean
+    public Binding exchangeToQueueBinding() {
+        return BindingBuilder
+                .bind(dealsContractorQueue())
+                .to(contractorsContractorExchange())
+                .withQueueName();
+    }
+
+    @Bean
+    public DirectExchange mainBorrowerExchange() {
+        return ExchangeBuilder
+                .directExchange(mainBorrowerExchangeName)
+                .durable(true)
+                .build();
+    }
+
+    @Bean
+    public Queue mainBorrowerQueue() {
+        return QueueBuilder
+                .durable(mainBorrowerQueueName)
+                .build();
+    }
+
+    @Bean
+    public Binding mainBorrowerBinding() {
+        return BindingBuilder
+                .bind(mainBorrowerQueue())
+                .to(mainBorrowerExchange())
+                .withQueueName();
     }
 
 }
