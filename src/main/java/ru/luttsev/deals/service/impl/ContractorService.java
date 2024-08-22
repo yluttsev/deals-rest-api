@@ -1,18 +1,10 @@
 package ru.luttsev.deals.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import ru.luttsev.deals.model.payload.dealstatus.SetMainBorrowerPayload;
-
-import java.net.URI;
+import ru.luttsev.deals.model.payload.rabbitmq.MainBorrowerRabbitMessage;
 
 /**
  * Сервис для работы с внешним сервисом контрагентов
@@ -21,22 +13,15 @@ import java.net.URI;
  */
 @Service
 @RequiredArgsConstructor
-@PropertySources(
-        @PropertySource("classpath:contractor.properties")
-)
 public class ContractorService {
 
-    /**
-     * URL сервиса контрагентов
-     */
-    @Value("${contractor.server.address}")
-    private String contractorServiceAddress;
+    private final RabbitTemplate rabbitTemplate;
 
-    /**
-     * Порт сервиса контрагентов
-     */
-    @Value("${contractor.server.port}")
-    private Integer contractorServicePort;
+    @Value("${rabbitmq.main-borrower-exchange}")
+    private String mainBorrowerExchange;
+
+    @Value("${rabbitmq.main-borrower-queue}")
+    private String mainBorrowerQueue;
 
     /**
      * Отправка параметра mainBorrower во внешний сервис контрагентов
@@ -46,18 +31,14 @@ public class ContractorService {
      * @return true если запрос успешно отправлен, false в случае ошибки
      */
     public boolean sendMainBorrower(String contractorId, boolean isMain) {
-        RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
         try {
-            ResponseEntity<String> response = restTemplate.exchange(
-                    URI.create("http://%s:%s/contractor/main-borrower".formatted(contractorServiceAddress, contractorServicePort)),
-                    HttpMethod.PATCH,
-                    new HttpEntity<>(SetMainBorrowerPayload.builder()
+            rabbitTemplate.convertAndSend(mainBorrowerExchange,
+                    mainBorrowerQueue,
+                    MainBorrowerRabbitMessage.builder()
                             .contractorId(contractorId)
-                            .mainBorrower(isMain)
-                            .build()),
-                    String.class
-            );
-            return response.getStatusCode().is2xxSuccessful();
+                            .isMain(isMain)
+                            .build());
+            return true;
         } catch (Exception e) {
             return false;
         }

@@ -30,9 +30,9 @@ spring:
     overwrite-existing-jobs: true
   datasource:
     driver-class-name: org.postgresql.Driver
-    url:
-    username:
-    password:
+    url: jdbc:postgresql://localhost:5432/deals
+    username: postgres
+    password: postgres
   jpa:
     hibernate:
       ddl-auto: none
@@ -46,10 +46,14 @@ spring:
         default-requeue-rejected: false
 
 rabbitmq:
+  contractor-exchange: contractors_contractor_exchange
   contractor-queue: deals_contractor_queue
   dead-exchange: deals_dead_exchange
   dead-queue: deal_contractor_dead_queue
   dead-contractor-exchange: deal_contractor_dead_exchange
+  main-borrower-exchange: main_borrower_exchange
+  main-borrower-queue: main_borrower_queue
+  message-ttl: 300000
 
 server:
   port: 8082
