@@ -2,12 +2,12 @@ package ru.luttsev.deals.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.luttsev.deals.exception.DealContractorNotFoundException;
 import ru.luttsev.deals.model.MessageStatus;
 import ru.luttsev.deals.model.entity.DealContractor;
 import ru.luttsev.deals.model.entity.Outbox;
+import ru.luttsev.deals.model.payload.rabbitmq.ContractorRabbitPayload;
 import ru.luttsev.deals.repository.DealContractorRepository;
 import ru.luttsev.deals.service.DealContractorService;
 import ru.luttsev.deals.service.OutboxService;
@@ -22,7 +22,6 @@ import java.util.UUID;
  */
 @Service
 @RequiredArgsConstructor
-@PreAuthorize("!hasRole('ADMIN')")
 public class DealContractorServiceImpl implements DealContractorService {
 
     private final DealContractorRepository dealContractorRepository;
@@ -42,14 +41,12 @@ public class DealContractorServiceImpl implements DealContractorService {
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     public DealContractor save(DealContractor entity) {
         return dealContractorRepository.save(entity);
     }
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     public void deleteById(UUID id) {
         DealContractor dealContractor = this.getById(id);
         if (dealContractor.isMain()) {
@@ -66,6 +63,19 @@ public class DealContractorServiceImpl implements DealContractorService {
             outboxService.save(lastOutboxMessage);
         }
         dealContractor.setActive(false);
+        this.save(dealContractor);
+    }
+
+    @Override
+    public List<DealContractor> getByContractorId(String contractorId) {
+        return dealContractorRepository.findByContractorId(contractorId);
+    }
+
+    @Override
+    @Transactional
+    public void updateByRabbitMessage(ContractorRabbitPayload payload, DealContractor dealContractor) {
+        dealContractor.setName(payload.getName());
+        dealContractor.setInn(payload.getInn());
         this.save(dealContractor);
     }
 

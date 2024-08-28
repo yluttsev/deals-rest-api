@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ProblemDetail;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,7 @@ import ru.luttsev.springbootstarterauditlib.annotation.WebAuditLog;
 @RestController
 @RequestMapping("/contractor-to-role")
 @RequiredArgsConstructor
+@PreAuthorize("!hasRole('ADMIN')")
 public class ContractorToRoleController {
 
     /**
@@ -75,6 +77,7 @@ public class ContractorToRoleController {
                     }
             )
     })
+    @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     @WebAuditLog(logLevel = LogLevel.INFO)
     @PostMapping("/add")
     public DealContractorPayload addRoleToDealContractor(@RequestBody SetRoleToDealContractorPayload payload) {
@@ -103,6 +106,7 @@ public class ContractorToRoleController {
                     }
             )
     })
+    @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     @WebAuditLog(logLevel = LogLevel.INFO)
     @DeleteMapping("/delete")
     public DealContractorPayload deleteRoleToDealContractor(@RequestBody SetRoleToDealContractorPayload payload) {

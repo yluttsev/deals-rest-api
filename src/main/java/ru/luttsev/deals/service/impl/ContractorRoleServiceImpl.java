@@ -2,7 +2,6 @@ package ru.luttsev.deals.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.luttsev.deals.exception.ContractorRoleNotFoundException;
 import ru.luttsev.deals.model.entity.ContractorRole;
@@ -21,7 +20,6 @@ import java.util.UUID;
  */
 @Service
 @RequiredArgsConstructor
-@PreAuthorize("!hasRole('ADMIN')")
 public class ContractorRoleServiceImpl implements ContractorRoleService {
 
     private final ContractorRoleRepository contractorRoleRepository;
@@ -52,7 +50,6 @@ public class ContractorRoleServiceImpl implements ContractorRoleService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     public DealContractor addRole(String contractorId, String roleId) {
         DealContractor dealContractor = dealContractorService.getById(UUID.fromString(contractorId));
         ContractorRole contractorRole = this.getById(roleId);
@@ -62,7 +59,6 @@ public class ContractorRoleServiceImpl implements ContractorRoleService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     public DealContractor deleteRole(String contractorId, String roleId) {
         DealContractor dealContractor = dealContractorService.getById(UUID.fromString(contractorId));
         ContractorRole contractorRole = this.getById(roleId);
